@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Startup Name Generator</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #0f1b2d;
+      --muted: #93a4b7;
+      --text: #e6f1ff;
+      --accent: #11c6a7;
+      --accent-2: #31e1c5;
+    }
+    * {
+      box-sizing: border-box;
+      transition: 0.3s ease-out;
+    }
+    body {
+      margin: 0;
+      background: radial-gradient(1200px 600px at 20% -10%, #0f2840 0%, var(--bg) 60%) fixed;
+      color: var(--text);
+      font-family: system-ui, sans-serif;
+      line-height: 1.4;
+    }
+    .wrap {
+      max-width: 800px;
+      margin: 32px auto;
+      padding: 0 20px;
+    }
+    h1 {
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.0));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      font-size: 14px;
+      margin-bottom: 14px;
+      outline: none;
+    }
+    input[type="text"]:focus {
+      border-color: var(--accent-2);
+      box-shadow: 0 0 0 3px rgba(49, 225, 197, 0.15);
+    }
+    .result {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 14px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    button {
+      background: linear-gradient(180deg, rgba(49,225,197,0.16), rgba(49,225,197,0.08));
+      border: 1px solid rgba(49,225,197,0.35);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      margin-right: 6px;
+    }
+    button:hover { transform: translateY(-1px); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Startup Name & Tagline Generator</h1>
+    <div class="card">
+      <input type="text" id="keywords" placeholder="Enter keywords..." />
+      <button id="generateBtn">Generate</button>
+      <div class="result" id="output">Your startup name & tagline will appear here.</div>
+      <button id="copyBtn">Copy</button>
+      <button id="shareBtn">Share</button>
+    </div>
+  </div>
+
+  <script>
+    const ranwirds = [
+      "Labs", "Hub", "Tech", "Solutions", "Works", "Flow", "Nest", "Spark",
+      "Hive", "Core", "Edge", "Vision", "Pulse", "Logic", "Forge", "Shift"
+    ];
+
+    const taglines = [
+      "Turning ideas into reality.",
+      "Innovation for the future.",
+      "Your growth, our mission.",
+      "Disrupting the ordinary.",
+      "Where creativity meets technology.",
+      "Empowering your vision.",
+      "Built for the bold.",
+      "We make it happen.",
+      "Engineering possibilities.",
+      "Think big, start now."
+    ];
+
+    const keywordsInput = document.getElementById('keywords');
+    const output = document.getElementById('output');
+    const generateBtn = document.getElementById('generateBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const shareBtn = document.getElementById('shareBtn');
+
+    function getRandom(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    generateBtn.addEventListener('click', () => {
+      const keywords = keywordsInput.value.trim().split(/\s+/).filter(Boolean);
+      let name = '';
+
+      if (keywords.length) {
+        name = keywords[Math.floor(Math.random() * keywords.length)];
+        name = name.charAt(0).toUpperCase() + name.slice(1);
+      } else {
+        name = getRandom(ranwirds);
+      }
+
+      name += getRandom(ranwirds);
+
+      const tagline = getRandom(taglines);
+      output.textContent = `${name} — ${tagline}`;
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      if (!output.textContent) return;
+      await navigator.clipboard.writeText(output.textContent);
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => copyBtn.textContent = 'Copy', 1500);
+    });
+
+    shareBtn.addEventListener('click', async () => {
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Startup Idea',
+          text: output.textContent
+        });
+      } else {
+        alert('Sharing not supported in this browser.');
+      }
+    });
+  </script>
+</body>
+</html>
